@@ -1,75 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "Grid.h"
 #include "TypesAssemblage.h"
-#include "MonteCarlo.h"
-
-static double **alloc_double_grid(int n) {
-    double **m = malloc(n * sizeof(double *));
-    for (int i = 0; i < n; i++)
-        m[i] = malloc(n * sizeof(double));
-    return m;
-}
-
-static void free_double_grid(double **m, int n) {
-    for (int i = 0; i < n; i++)
-        free(m[i]);
-    free(m);
-}
+#include "Thermique.h"
+#include "PlacementProgressif.h"
+#include "Affichage.h"
 
 int main(void) {
     srand((unsigned int)time(NULL));
 
-    int rayon;
-    printf("Rayon du cœur (max 25) : ");
-    if (scanf("%d", &rayon) != 1) return 1;
+    int rayon = 5;
+    printf("Rayon du cœur (par défaut 5) : ");
+    if (scanf("%d", &rayon) != 1 || rayon <= 0) {
+        rayon = 5;
+    }
 
-    Grid G = generer_grille_circulaire(rayon);
+    Grid *G = generer_grille_circulaire(rayon);
 
-    printf("\n=== Cœur généré ===\n");
+    printf("\n=== Grille circulaire générée (taille = %d) ===\n", G->size);
     afficher_core(G);
 
-    TypeAssemblage types[16];
+    TypeAssemblage types[32];
     int nb_types = 0;
     definir_types(types, &nb_types);
 
-    remplir_grille_aleatoire(&G, types, nb_types);
+    /* Placement symétrique identique au Python */
+    remplir_grille_symetrique(G, types, nb_types);
 
-    printf("\n=== Remplissage aléatoire ===\n");
-    afficher_grille(G);
-
-    double **Tfield = alloc_double_grid(G.size);
+    /* === THERMIQUE === */
+    int n = G->size;
+    double **T = malloc(n * sizeof(double *));
+    for (int i = 0; i < n; i++)
+        T[i] = malloc(n * sizeof(double));
 
     double Tmin, Tmax, deltaT, grad_max;
 
-    calculer_carte_thermique(&G, types, nb_types, Tfield);
-    diffusion_thermique(&G, Tfield, 5);
-    evaluer_thermique(&G, Tfield, &Tmin, &Tmax, &deltaT, &grad_max);
+    calculer_carte_thermique(G, types, nb_types, T);
+    diffusion_thermique(G, T, 40);
+    evaluer_thermique(G, T, &Tmin, &Tmax, &deltaT, &grad_max);
 
-    printf("\n=== Carte thermique (ASCII) ===\n");
-    afficher_thermique_ascii(&G, Tfield);
+    /* === LÉGENDE COULEUR === */
+    printf("\n=== Légende des couleurs ===\n");
+    for (int t = 0; t < nb_types; t++) {
+        int idx = couleur_type(types[t].symbole);
+        const char *col = (idx == -1 ? "⬜" : palette[idx]);
+        printf("  %c → %s\n", types[t].symbole, col);
+    }
 
-    printf("\n=== Carte thermique (couleur) ===\n");
-    afficher_thermique_couleur(&G, Tfield);
+    /* === AFFICHAGE ASCII === */
+    printf("\n=== Grille ASCII ===\n");
+    for (int i = 0; i < G->size; i++) {
+        for (int j = 0; j < G->size; j++)
+            printf("%c ", G->g[i][j]);
+        printf("\n");
+    }
 
-    printf("\n=== Évaluation initiale ===\n");
-    printf("Tmin = %.4f\n", Tmin);
-    printf("Tmax = %.4f\n", Tmax);
-    printf("ΔT   = %.4f\n", deltaT);
-    printf("Gradient max = %.4f\n", grad_max);
-
-    printf("\n=== Monte Carlo (Metropolis) ===\n");
-    monte_carlo_metropolis(&G, types, nb_types, 2000, 0.5, Tfield);
+    /* === AFFICHAGE COULEUR === */
+    printf("\n=== Grille en couleurs ===\n");
     afficher_grille(G);
 
-    printf("\n=== Recuit simulé ===\n");
-    recuit_simule(&G, types, nb_types, 5000, 1.0, 0.999, Tfield);
-    afficher_grille(G);
-
-    free_double_grid(Tfield, G.size);
-    free_int_grid(G.core, G.size);
-    free_char_grid(G.g, G.size);
+    /* === EXPORT === */
+    printf("\nSauvegarde dans assemblage.txt...\n");
+    sauver_assemblage("assemblage.txt", G, types, nb_types);
+    printf("Fichier assemblage.txt écrit.\n");
 
     return 0;
 }

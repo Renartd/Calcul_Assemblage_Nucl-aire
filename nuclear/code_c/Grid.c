@@ -3,8 +3,11 @@
 #include <math.h>
 #include "Grid.h"
 #include "TypesAssemblage.h"
+#include "Affichage.h"
 
+// ===============================
 // Allocations
+// ===============================
 
 int **alloc_int_grid(int n) {
     int **m = malloc(n * sizeof(int *));
@@ -15,8 +18,11 @@ int **alloc_int_grid(int n) {
 
 char **alloc_char_grid(int n) {
     char **m = malloc(n * sizeof(char *));
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++) {
         m[i] = malloc(n * sizeof(char));
+        for (int j = 0; j < n; j++)
+            m[i][j] = '-';
+    }
     return m;
 }
 
@@ -32,7 +38,9 @@ void free_char_grid(char **grid, int n) {
     free(grid);
 }
 
-// 1) Cercle euclidien sans correction
+// ===============================
+// 1) Cercle euclidien
+// ===============================
 
 void generer_cercle(Grid *G) {
     int n  = G->size;
@@ -53,7 +61,9 @@ void generer_cercle(Grid *G) {
     }
 }
 
-// 2) Correction des extrémités (épaissir le sommet lui-même)
+// ===============================
+// 2) Correction des extrémités
+// ===============================
 
 void corriger_extremites(Grid *G) {
     int n  = G->size;
@@ -97,46 +107,52 @@ void corriger_extremites(Grid *G) {
     }
 }
 
+// ===============================
 // 3) Génération complète
+// ===============================
 
-Grid generer_grille_circulaire(int rayon) {
-    Grid G;
-    G.rayon = rayon;
-    G.size  = 2 * rayon + 1;
+Grid *generer_grille_circulaire(int rayon) {
+    Grid *G = malloc(sizeof(Grid));
+    G->rayon = rayon;
+    G->size  = 2 * rayon + 1;
 
-    int n = G.size;
+    int n = G->size;
 
-    G.core = alloc_int_grid(n);
-    G.g    = alloc_char_grid(n);
+    G->core = alloc_int_grid(n);
+    G->g    = alloc_char_grid(n);
 
-    for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++)
-            G.g[i][j] = '-';
-
-    generer_cercle(&G);
-    corriger_extremites(&G);
+    generer_cercle(G);
+    corriger_extremites(G);
 
     return G;
 }
 
+// ===============================
 // Affichages
+// ===============================
 
-void afficher_core(Grid G) {
-    for(int i = 0; i < G.size; i++) {
-        for(int j = 0; j < G.size; j++)
-            printf("%c ", G.core[i][j] ? 'A' : '-');
+void afficher_core(Grid *G) {
+    for(int i = 0; i < G->size; i++) {
+        for(int j = 0; j < G->size; j++)
+            printf("%c ", G->core[i][j] ? 'O' : '.');
         printf("\n");
     }
 }
 
-void afficher_grille(Grid G) {
-    for (int i = 0; i < G.size; i++) {
-        for (int j = 0; j < G.size; j++) {
-            char c = G.g[i][j];
+void afficher_grille(Grid *G) {
+    for (int i = 0; i < G->size; i++) {
+        for (int j = 0; j < G->size; j++) {
+            char c = G->g[i][j];
+
+            if (c == '-' || !G->core[i][j]) {
+                printf("⬜");  // blanc pour vide
+                continue;
+            }
+
             int idx = couleur_type(c);
-            if (idx == -1) printf("⬜");
-            else           printf("%s", palette[idx]);
+            printf("%s", palette[idx]);
         }
         printf("\n");
     }
 }
+

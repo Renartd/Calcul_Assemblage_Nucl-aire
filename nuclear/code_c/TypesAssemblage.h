@@ -3,29 +3,37 @@
 
 #include "Grid.h"
 
+/* Types de combustible */
+typedef enum {
+    COMB_THORIUM = 0,   /* Th-232 */
+    COMB_U238,
+    COMB_U235,
+    COMB_PU239,
+    COMB_MOX
+} CombustibleType;
+
+/* Description d'un type d'assemblage */
 typedef struct {
-    char symbole;
-    double puissance;
+    char   symbole;          /* Symbole dans la grille */
+    double puissance;        /* Puissance thermique */
+    int    stock_max;        /* Stock total disponible */
+
+    CombustibleType combustible;
+
+    /* Enrichissement simple (U235, U238, Th, Pu selon le type) */
+    double enrichissement_principal;
+
+    /* Enrichissements MOX */
+    double enrichissement_mox_pu;
+    double enrichissement_mox_u235;
+    double enrichissement_mox_u238;
+
 } TypeAssemblage;
 
-extern const char *palette[16];
-
-int couleur_type(char c);
-
+/* Saisie interactive */
 void definir_types(TypeAssemblage *types, int *nb_types);
-void remplir_grille_aleatoire(Grid *G, TypeAssemblage *types, int nb_types);
 
-void calculer_carte_thermique(Grid *G, TypeAssemblage *types, int nb_types,
-                              double **T);
-
-void diffusion_thermique(Grid *G, double **T, int iterations);
-
-void evaluer_thermique(Grid *G, double **T,
-                       double *Tmin, double *Tmax,
-                       double *deltaT, double *grad_max);
-
-/* Nouveaux affichages */
-void afficher_thermique_ascii(Grid *G, double **T);
-void afficher_thermique_couleur(Grid *G, double **T);
+/* Export grille + description des types */
+void sauver_assemblage(const char *nom_fichier, Grid *G, TypeAssemblage *types, int nb_types);
 
 #endif

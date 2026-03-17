@@ -2,8 +2,8 @@
 #define GRID_H
 
 typedef struct {
-    int **core;   // 1 = cœur, 0 = vide
-    char **g;     // symbole d’assemblage ou '-'
+    int **core;
+    char **g;
     int rayon;
     int size;
 } Grid;
@@ -13,11 +13,9 @@ char **alloc_char_grid(int n);
 void free_int_grid(int **grid, int n);
 void free_char_grid(char **grid, int n);
 
-Grid generer_grille_circulaire(int rayon);
-void generer_cercle(Grid *G);
-void corriger_extremites(Grid *G);
+Grid *generer_grille_circulaire(int rayon);
 
-void afficher_core(Grid G);
-void afficher_grille(Grid G);
+void afficher_core(Grid *G);
+void afficher_grille(Grid *G);
 
 #endif

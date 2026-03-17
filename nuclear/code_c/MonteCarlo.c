@@ -4,6 +4,8 @@
 #include "Grid.h"
 #include "TypesAssemblage.h"
 #include "MonteCarlo.h"
+#include "Thermique.h"
+
 
 static double rand01(void) {
     return rand() / (double)RAND_MAX;
