@@ -1,20 +1,25 @@
 # Grille d’assemblage
-11
-----bcb----
---abababa--
--acacacaca-
--bacbcbcab-
-bacbababcab
-cbacbabcabc
-bacbababcab
--bacbcbcab-
--acacacaca-
---abababa--
-----bcb----
+15
+------CDC------
+----DDBCBDD----
+---BCCABACCB---
+--BABBDADBBAB--
+-DCBAACDCAABCD-
+-DCBADBCBDABCD-
+CBADCBABABCDABC
+DCBADCBABCDABCD
+CBADCBABABCDABC
+-DCBADBCBDABCD-
+-DCBAACDCAABCD-
+--BABBDADBBAB--
+---BCCABACCB---
+----DDBCBDD----
+------CDC------
 
 # Types d’assemblages
-3
-# symbole  puissance(MW)  stock  combustible  enrich_principal  mox_pu  mox_u235  mox_u238
-a 1.000000 123 Thorium 1.000000 0.000000 0.000000 0.000000
-b 2.000000 234 Thorium 2.000000 0.000000 0.000000 0.000000
-c 4.000000 214 Thorium 4.000000 0.000000 0.000000 0.000000
+4
+# symbole puissance stock combustible enrich_principal mox_pu mox_u235 mox_u238
+A 1.000000 999 U235 2.000000 0.000000 0.000000 0.000000
+B 2.000000 999 U235 2.000000 0.000000 0.000000 0.000000
+C 4.000000 999 U235 2.000000 0.000000 0.000000 0.000000
+D 8.000000 999 U235 3.000000 0.000000 0.000000 0.000000
