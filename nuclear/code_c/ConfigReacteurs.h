@@ -23,9 +23,8 @@ static const char *NOMS_REACTEURS[] = {
     "CANDU",                 /* 2 */
     "RNR-Na (sodium)",       /* 3 */
     "RNR-Pb (plomb-bismuth)",/* 4 */
-    "Sels fondus (thorium)", /* 5 */
-    "UNGG",                  /* 6 */
-    "RBMK"                   /* 7 */
+    "UNGG",                  /* 5 */
+    "RBMK"                   /* 6 */
 };
 
 /* ── Fonctions ─────────────────────────────────────────── */

@@ -197,9 +197,8 @@ void sauver_assemblage(const char *nom_fichier,
         case 2: type_str = "CANDU";  break;
         case 3: type_str = "RNR_NA"; break;
         case 4: type_str = "RNR_PB"; break;
-        case 5: type_str = "RHT";    break;  /* sels fondus → RHT approx */
-        case 6: type_str = "RHT";    break;  /* UNGG → RHT (gaz) */
-        case 7: type_str = "REP";    break;  /* RBMK → REP (eau bouillante) */
+        case 5: type_str = "RHT";    break;  /* UNGG → RHT (gaz) */
+        case 6: type_str = "REP";    break;  /* RBMK → REP (eau bouillante) */
         default: type_str = "REP";   break;
     }
     fprintf(f, "# reacteur=%s\n", type_str);

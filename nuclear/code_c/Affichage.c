@@ -1,6 +1,6 @@
 #include "Affichage.h"
 
-/* 12 couleurs distinctes + blanc réservé au vide */
+/* 8 couleurs distinctes + blanc réservé au vide */
 const char *palette[] = {
     "🟥",  // rouge
     "🟧",  // orange
@@ -10,10 +10,6 @@ const char *palette[] = {
     "🟪",  // violet
     "🟫",  // marron
     "⬛",  // noir
-    "🟫",  // brun clair
-    "🟦",  // bleu clair
-    "🟩",  // vert clair
-    "🟧"   // orange clair
 };
 
 /* Taille réelle de la palette */

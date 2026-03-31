@@ -20,7 +20,7 @@ int main(void) {
     if (scanf("%d", &mode) != 1) mode = 1;
 
     int rayon = 5;
-    printf("Rayon du coeur (defaut 5) : ");
+    printf("Rayon du coeur : ");
     if (scanf("%d", &rayon) != 1 || rayon <= 0) rayon = 5;
 
     Grid *G = generer_grille_circulaire(rayon);
@@ -46,9 +46,8 @@ int main(void) {
         printf(" 2) CANDU\n");
         printf(" 3) RNR sodium\n");
         printf(" 4) RNR plomb\n");
-        printf(" 5) Sels fondus (thorium)\n");
-        printf(" 6) UNGG\n");
-        printf(" 7) RBMK\n");
+        printf(" 5) UNGG\n");
+        printf(" 6) RBMK\n");
         printf("Votre choix : ");
         if (scanf("%d", &type_reacteur) != 1) type_reacteur = 1;
 
@@ -75,7 +74,7 @@ int main(void) {
             printf("  Moderateur : %.1f\n", therm.moderateur);
 
             /* Nb types ajustable */
-            printf("\nNombre de types souhaite (defaut = %d) : ", nb_types);
+            printf("\nNombre de types souhaite : ");
             int n2 = 0;
             if (scanf("%d", &n2) == 1 && n2 > 0 && n2 <= 8) {
                 for (int i = P.nb_types; i < n2; i++) {
@@ -94,8 +93,7 @@ int main(void) {
             /* Puissances ajustables */
             printf("\nSaisir la puissance de chaque type :\n");
             for (int i = 0; i < nb_types; i++) {
-                printf("Puissance type %c (defaut = %.2f MW) : ",
-                       types[i].symbole, types[i].puissance);
+                printf("Puissance type %c (MW) : ", types[i].symbole);
                 double val;
                 if (scanf("%lf", &val) == 1 && val > 0)
                     types[i].puissance = val;
